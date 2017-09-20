@@ -45,7 +45,15 @@ def decode_formatstring(fmt):
     for char in fmt:
         if char == '}':
             in_annotation = False
-            # Process annotation here
+            names, steps = decode_annotation(annotation)
+
+            for name in names:
+                if name != '':
+                    field_names.append(name)
+                else:
+                    field_names.append("unnamed_{}".format(len(field_names)))
+
+            post_processing[-1] = steps
             continue
         elif in_annotation:
             annotation += char
@@ -59,10 +67,59 @@ def decode_formatstring(fmt):
             continue
         elif char.isalpha():
             parsed_format.append((char, count))
-            field_names.append("_{}".format(len(field_names)))
+            field_names.append("unnamed_{}".format(len(field_names)))
             post_processing.append(None)
             count = ''
 
     raw_format = prefix + "".join([count + char for char, count in parsed_format])
 
     return DecoderInfo(raw_format, prefix, parsed_format, field_names, post_processing)
+
+
+def decode_annotation(annotation):
+    """Decode an annotation into a set of actions and result names.
+
+    Annotations can do one of 3 things:
+    - Assign a name to a field
+    - split a field into multiple subfields based on bitfield processing
+    - Postprocess a value according to some rule
+
+    Returns:
+        list, list: A list of all field names that this annotation will result
+            in and a list of callables that will produce field values from the
+            raw parse result
+    """
+
+    subfields = annotation.split(",")
+
+    out_names = []
+    out_steps = []
+
+    combined_width = 0
+
+    for field in subfields:
+        step = lambda x: x
+
+        name, _sep, bitwidth = field.partition(":")
+        name = name.strip()
+        bitwidth = bitwidth.strip()
+
+        out_names.append(name)
+        if bitwidth != '':
+            bitwidth = int(bitwidth)
+            step = lambda x, width=bitwidth: ((x >> combined_width & ((1 << width) - 1)))
+            combined_width += bitwidth
+
+        out_steps.append(step)
+
+    return out_names, out_steps
+
+
+def create_tuple(info):
+    """Create a namedtuple from the information in info.
+
+    Returns:
+        type: a new namedtuple type that can be instantiated.
+    """
+
+    return namedtuple('UnnamedTuple', info.field_names)

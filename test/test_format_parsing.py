@@ -12,23 +12,18 @@ def test_passthrough():
     out = decode_formatstring("<HBL")
     assert out.prefix == '<'
     assert out.raw_format == "<HBL"
-    assert out.field_names == ['_0', '_1', '_2']
+    assert out.field_names == ['unnamed_0', 'unnamed_1', 'unnamed_2']
 
     out = decode_formatstring("BL")
     assert out.prefix == ''
     assert out.raw_format == "BL"
-    assert out.field_names == ['_0', '_1']
+    assert out.field_names == ['unnamed_0', 'unnamed_1']
 
     out = decode_formatstring("4BL")
     assert out.prefix == ''
     assert out.raw_format == '4BL'
-    assert out.field_names == ['_0', '_1']
+    assert out.field_names == ['unnamed_0', 'unnamed_1']
 
     out = decode_formatstring("<H{name}B")
     assert out.prefix == '<'
     assert out.raw_format == "<HB"
-
-
-def test_annotation_parsing():
-    """Make sure that we parse annotations correctly."""
-
