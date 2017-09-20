@@ -13,6 +13,31 @@ def test_raw_unpacking():
     out = unpack("<HH", raw)
     out_list = unpack("<HH", raw, aslist=True)
     out_dict = unpack("<HH", raw, asdict=True)
+
     assert [x for x in out] == [0xFFAB, 1]
     assert out_list == [0xFFAB, 1]
     assert out_dict == {'unnamed_0': 0xFFAB, 'unnamed_1': 1}
+
+
+def test_named_unpacking():
+    """Ensure we can name fields in structs."""
+
+    raw = struct.pack("<HH", 0xFFAB, 1)
+
+    out = unpack("<H{name1}H{name2}", raw)
+    out_list = unpack("<H{name1}H{name2}", raw, aslist=True)
+    out_dict = unpack("<H{name1}H{name2}", raw, asdict=True)
+
+    assert out.name1 == 0xFFAB
+    assert out.name2 == 1
+    assert out_list == [0xFFAB, 1]
+    assert out_dict == {'name1': 0xFFAB, 'name2': 1}
+
+
+def test_bitfield_decoding():
+    """Ensure we can decode bitfields without names."""
+
+    raw = struct.pack("<HH", 0xFFAB, 1)
+
+    out_list = unpack("<H{:4, :4, :8}H", raw, aslist=True)
+    assert out_list == [0xB, 0xA, 0xFF, 1]

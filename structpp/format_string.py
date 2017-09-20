@@ -47,6 +47,8 @@ def decode_formatstring(fmt):
             in_annotation = False
             names, steps = decode_annotation(annotation)
 
+            # Remove the old unnamed last entry
+            field_names = field_names[:-1]
             for name in names:
                 if name != '':
                     field_names.append(name)
@@ -54,6 +56,7 @@ def decode_formatstring(fmt):
                     field_names.append("unnamed_{}".format(len(field_names)))
 
             post_processing[-1] = steps
+            annotation = ''
             continue
         elif in_annotation:
             annotation += char
@@ -107,7 +110,7 @@ def decode_annotation(annotation):
         out_names.append(name)
         if bitwidth != '':
             bitwidth = int(bitwidth)
-            step = lambda x, width=bitwidth: ((x >> combined_width & ((1 << width) - 1)))
+            step = lambda x, width=bitwidth, combined=combined_width: ((x >> combined) & ((1 << width) - 1))
             combined_width += bitwidth
 
         out_steps.append(step)

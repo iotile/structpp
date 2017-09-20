@@ -32,7 +32,6 @@ def unpack(fmt, packed, asdict=False, aslist=False):
         raise ValueError("You cannot specify both asdict and aslist")
 
     info = decode_formatstring(fmt)
-
     raw_data = struct.unpack(info.raw_format, packed)
 
     out = []
