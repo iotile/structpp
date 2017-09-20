@@ -23,3 +23,12 @@ def test_passthrough():
     assert out.prefix == ''
     assert out.raw_format == '4BL'
     assert out.field_names == ['_0', '_1']
+
+    out = decode_formatstring("<H{name}B")
+    assert out.prefix == '<'
+    assert out.raw_format == "<HB"
+
+
+def test_annotation_parsing():
+    """Make sure that we parse annotations correctly."""
+

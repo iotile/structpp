@@ -43,13 +43,12 @@ def decode_formatstring(fmt):
         fmt = fmt[1:]
 
     for char in fmt:
-        if in_annotation:
-            annotation += char
-            continue
-
         if char == '}':
             in_annotation = False
             # Process annotation here
+            continue
+        elif in_annotation:
+            annotation += char
             continue
         elif char == '{':
             in_annotation = True
