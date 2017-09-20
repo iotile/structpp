@@ -11,7 +11,7 @@ setup(
     install_requires=[
         "future>=0.16.0",
     ],
-    description="A typechecking and shell generation program for python APIs",
+    description="An improved struct module with support for names and bitfields",
     author="Arch",
     author_email="info@arch-iot.com",
     url="https://github.com/iotile/structpp",
