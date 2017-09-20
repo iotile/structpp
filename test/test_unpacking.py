@@ -41,3 +41,15 @@ def test_bitfield_decoding():
 
     out_list = unpack("<H{:4, :4, :8}H", raw, aslist=True)
     assert out_list == [0xB, 0xA, 0xFF, 1]
+
+def test_named_bitfield_decoding():
+    """Ensure we can decode bitfields with names."""
+
+    raw = struct.pack("<HH", 0xFFAB, 1)
+
+    out = unpack("<H{name1:4, name2:4, name3:8}H", raw)
+
+    assert out.name1 == 0xB
+    assert out.name2 == 0xA
+    assert out.name3 == 0xFF
+    assert out[3] == 1
