@@ -13,6 +13,12 @@ The two main use cases for `structpp` are:
 
 ## Basic Usage
 
+### Installation
+
+```
+pip install structpp
+```
+
 ### Naming Results
 
 To name the results of an unpacked binary structure, put the name
