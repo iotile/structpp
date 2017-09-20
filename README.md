@@ -11,7 +11,9 @@ The two main use cases for `structpp` are:
 - Naming the results from `struct.unpack` 
 - Decoding bitfields
 
-## Basic Usage - Naming Results
+## Basic Usage
+
+### Naming Results
 
 To name the results of an unpacked binary structure, put the name
 in curly brackets after the format code:
@@ -47,7 +49,7 @@ assert unpacked.val1 == 0xFFAB
 assert unpacked[1] == 1
 ```
 
-## Basic Usage - Decoding Bitfields
+### Decoding Bitfields
 
 Using the same packed structure as above, we can decode the first 16-bit value into three
 values of width 4, 4, and 8 bits:
