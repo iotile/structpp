@@ -2,11 +2,7 @@
 
 Usage: python release.py <component_name>-<expected version>
 
-Component name should be one of:
-    iotilecore
-    iotilebuild
-    iotilegateway
-    iotile_transport_bled112
+Component name should be one of the values listed in components.py
 
 The version must match the version encoded in version.py in the respective
 subdirectory for the component for the release to proceed.
